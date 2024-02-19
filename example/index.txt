@@ -1,0 +1,2 @@
+logowanie //php przekieruje do odpowiedniego folderu
+rejestracja - przekierowanie do rejestraci

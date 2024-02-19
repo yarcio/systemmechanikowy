@@ -1,1 +1,1 @@
-nic
+struktura strony w example

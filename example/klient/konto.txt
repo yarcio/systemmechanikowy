@@ -1,0 +1,1 @@
+js wyśle inputy z wszystkimi informacjami o osobie oraz będzie przycisk by te dane zaktualizować
