@@ -5,7 +5,7 @@ async function main() {
       formData.append("func", func);
       if (vars!=null) formData.append("vars", vars);
       try {
-      const response = await fetch("/main.php", {
+      const response = await fetch("/php/main.php", {
           method: "POST",
           body: formData,
       });
