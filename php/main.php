@@ -2,7 +2,7 @@
 session_start();
 $host = "localhost";
 $user = "root";
-$password = "mysqlWindowsServer2019";
+$password = "";
 $database = "systemmechanikowy";
 $conn = mysqli_connect($host, $user, $password, $database);
 function login($username, $password) {
@@ -55,14 +55,16 @@ function login($username, $password) {
 }
 function checklogin($mode) {
     if (!($_SESSION["sessionstatus"] == 1 && $_SESSION["mode"]==$mode)) {
-        header("Location: /");
+        // header("Location: /");
+        echo "wygasło";
+        echo $_SESSION["mode"];
         exit();
     }
 }
 function getOsoba($col="all") {
     global $conn;
     if ($col=="all") $col = "id_osoba, imie, nazwisko, dataUr, nrTel, plec, nazwa";
-    $id = ($_SESSION["mode"]="w") ? "" : "=".$_SESSION['id_osoba'];//test
+    $id = ($_SESSION["mode"]=="w") ? "" : "=".$_SESSION['id_osoba'];//test
     $query = $conn->prepare("select $col from osoba where id_osoba$id");//test id
     $query->execute();
     $result = $query->get_result();

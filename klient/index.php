@@ -2,4 +2,4 @@
 include $_SERVER["DOCUMENT_ROOT"]."/php/main.php";
 checklogin("k");
 ?>
-klient
+klient<a href="konto.php">konto</a>

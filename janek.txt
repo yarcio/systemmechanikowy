@@ -1,2 +1,3 @@
 struktura strony w example
 wszystkie strony po logowaniu muszą mieć kod przedstawiony w checkloginexample.php
+nie bój się usuwać tekstu itd co napisałem, zostaw jedynie skrypty

@@ -1,5 +1,5 @@
-1. marcinekpro marcin2001
-2. mag garnuchy
-3. ohdeer jelen2003
-4. pawelskrzydlarz skrzydlarzpawel
-5. mandaryniarz marcin2003
+W1. marcinekpro marcin2001
+K2. mag garnuchy
+M3. ohdeer jelen2003
+M4. pawelskrzydlarz skrzydlarzpawel
+K5. mandaryniarz marcin2003
