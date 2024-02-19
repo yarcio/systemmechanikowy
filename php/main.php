@@ -55,8 +55,7 @@ function login($username, $password) {
 }
 function checklogin($mode) {
     if (!($_SESSION["sessionstatus"] == 1 && $_SESSION["mode"]==$mode)) {
-        // header("Location: /");
-        echo "wygasło";
+        header("Location: /");
         echo $_SESSION["mode"];
         exit();
     }
@@ -99,8 +98,9 @@ function setUpdOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $passw
     }
     global $conn;
     $query = $conn->prepare("update osoba set imie=?, nazwisko=?, dataur=?, nrtel=?, plec=?, nazwa=?, haslo=password(?) where id_osoba=?");
-    $query->bind_param("sssidssi", $imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password, $id);
+    $query->bind_param("ssssdssi", $imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password, $id);
     $query->execute();
+    echo json_encode("Zaktualizowano dane");
 }
 function setUpdPieniadze($count) {
     global $conn;

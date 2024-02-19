@@ -1,3 +1,4 @@
+//unique username test
 async function sendData(func, vars) {
   const formData = new FormData();
   formData.append("func", func);
@@ -35,8 +36,10 @@ class Osoba {
   setOsoba() {
 
   }
-  setUpdOsoba() {
-
+  async setUpdOsoba(imie, nazwisko, dataUr, nrTel, plec, nazwa, haslo) {
+    let vars = [imie, nazwisko, dataUr, nrTel, plec, nazwa, haslo];
+    let response = await sendData("setUpdOsoba", vars);
+    alert(response);
   }
   zadzwon() {
     window.open("tel:" + this.nrTel);
@@ -49,6 +52,16 @@ class Klient extends Osoba {
     this.samochody = samochody;
     this.pieniadzeWGroszach = pieniadzeWGroszach;
   }
+  setUpdPieniadze() {
+    
+  }
+  setPieniadze() {
+
+  }
+  getPieniadze() {
+
+  }
+
 }
 class Mechanik extends Osoba {
   constructor(id_osoba, imie, nazwisko, dataUr, nrTel, plec, nazwa, id_mechanik, wyplataWGroszach, dataZatrudnienia, wyksztalcenie, etat) {
