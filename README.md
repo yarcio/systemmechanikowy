@@ -1,4 +1,4 @@
-# system-mechanikowy
+# systemmechanikowy
 
 Potężny system mechanikowy.
 
