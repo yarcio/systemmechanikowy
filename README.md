@@ -12,4 +12,4 @@ Pliki HTML: podstrony/
 
 Pliki JavaScript: js/
 
-serwer egzystuje http://system-mechanikowy.ddns.net/
+serwer egzystuje http://systemmechanikowy.ddns.net/
