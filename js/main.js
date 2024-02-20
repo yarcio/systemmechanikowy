@@ -15,7 +15,7 @@ async function sendData(func, vars) {
 }
 class Osoba {
   constructor(id_osoba, imie, nazwisko, dataUr, nrTel, plec, nazwa) {
-    this.nazwa=nazwa;
+    this.nazwa = nazwa;
     this.id_osoba = id_osoba;
     this.imie = imie;
     this.nazwisko = nazwisko;
@@ -52,7 +52,7 @@ class Klient extends Osoba {
     this.pieniadzeWGroszach = pieniadzeWGroszach;
   }
   setUpdPieniadze() {
-    
+
   }
   setRPieniadze() {
 
@@ -68,9 +68,47 @@ class Klient extends Osoba {
     this.nazwa = response[pos]["nazwa"];
     response = await sendData("getKlient");
     this.id_klient = response[posK]["id_klient"];
-    this.pieniadzeWGroszach = response[posK]["pieniadzewgroszach"]
+    this.pieniadzeWGroszach = response[posK]["pieniadzewgroszach"];
+  }
+  async getCountSamochod() {//id
+    let response = await sendData("getCountSamochod");
+    return response;
   }
 
+}
+class Samochod {
+  constructor(id_samochod, marka, rocznik, przebiegWCm, model, rejestracja, status) {
+    this.id_samochod = id_samochod;
+    this.marka = marka;
+    this.rocznik = rocznik;
+    this.przebiegWCm = przebiegWCm;
+    this.model = model;
+    this.rejestracja = rejestracja;
+    this.status = status;
+  }
+
+  async getSamochod(pos = 0) {
+    let response = await sendData("getSamochod");
+    this.id_samochod = response[pos]["id_samochod"];
+    this.marka = response[pos]["marka"];
+    this.rocznik = response[pos]["rocznik"];
+    this.przebiegWCm = response[pos]["przebwcm"];
+    this.model = response[pos]["model"];
+    this.rejestracja = response[pos]["rejestracja"];
+    this.status = response[pos]["status"];
+  }
+  setSamochod() {
+
+  }
+  removeSamochod() {
+
+  }
+  zezlomowanie() {
+
+  }
+  naczesci() {
+    
+  }
 }
 class Mechanik extends Osoba {
   constructor(id_osoba, imie, nazwisko, dataUr, nrTel, plec, nazwa, id_mechanik, wyplataWGroszach, dataZatrudnienia, wyksztalcenie, etat) {
@@ -104,26 +142,6 @@ class Mechanik extends Osoba {
     //func
   }
 }
-class Samochod {
-  constructor(id_samochod, marka, rocznik, przebiegWCm, model, rejestracja, status) {
-    this.id_samochod = id_samochod;
-    this.marka = marka;
-    this.rocznik = rocznik;
-    this.przebiegWCm = przebiegWCm;
-    this.model = model;
-    this.rejestracja = rejestracja;
-    this.status = status;
-  }
-  getSamochod() {
-
-  }
-  setSamochod() {
-
-  }
-  removeSamochod() {
-    
-  }
-}
 class Zlecenie {
   constructor(id_mechanik, id_samochod, problem, dataRozpoczecia, dataZakonczenia) {
     this.id_mechanik = id_mechanik;
@@ -141,7 +159,6 @@ var kontoklient;
 async function konto() {
   kontoklient = new Osoba();
   await kontoklient.getOsoba();
-  console.log(kontoklient)
   document.getElementById("data").innerHTML = `<p>Imie:<br/><input type='text' id='imie' value='${kontoklient.imie}'/></p>
   <p>Nazwisko:<br/><input type='text' id='nazwisko' value='${kontoklient.nazwisko}'/></p>
   <p>Data urodzenia:<br/><input type='date' id='dataUr' value='${kontoklient.dataUr}'/></p>
@@ -155,11 +172,41 @@ async function konto() {
   <p><input type="submit" value="Zaktualizuj" onclick="zaktualizujKonto()"/></p>`;
 }
 function zaktualizujKonto() {
-  if (document.getElementById("haslo").value!=document.getElementById("powtwierdzhaslo").value) alert("Hasła nie są takie same!");
-  else if (document.getElementById("haslo").value.length<4) alert("Hasło musi mieć przynajmniej 4 znaki!");
+  if (document.getElementById("haslo").value != document.getElementById("powtwierdzhaslo").value) alert("Hasła nie są takie same!");
+  else if (document.getElementById("haslo").value.length < 4) alert("Hasło musi mieć przynajmniej 4 znaki!");
   else kontoklient.setUpdOsoba(document.getElementById("imie").value, document.getElementById("nazwisko").value, document.getElementById("dataUr").value, document.getElementById("nrTel").value, document.getElementById("plec").value, document.getElementById("nazwa").value, document.getElementById("haslo").value);
 
 }
 function sliderRefresh() {
   document.getElementById("jakaplec").innerHTML = document.getElementById("plec").value;
+}
+var klientObj;
+var samochody;
+async function listasamochody() {
+  klientObj = new Klient();
+  await klientObj.getKlient();
+
+  let samochodCount = await klientObj.getCountSamochod();
+  let divdatastr = `<p>Pieniądze: ${klientObj.pieniadzeWGroszach}gr</p>`;
+  if (samochodCount > 0) {
+    samochody = [];
+    divdatastr += `<p><table><caption>Lista twoich samochodów</caption><tr><th>Marka</th><th>Rocznik</th><th>Przebieg</th><th>Model</th><th>Rejestracja</th><th>Status</th><th>Działania</th></tr>`;
+    for (let i = 0; i < samochodCount; i++) {
+      samochody[i] = new Samochod();
+      await samochody[i].getSamochod(i);
+      divdatastr += `<tr><td>${samochody[i].marka}</td><td>${samochody[i].rocznik}r.</td><td>${samochody[i].przebiegWCm}cm</td>
+    <td>${samochody[i].model}</td><td>${samochody[i].rejestracja}</td><td>${samochody[i].status}</td><td>`;
+      if (samochody[i].status != "Do odbioru") divdatastr += `<button onclick="zlecenie(${i})">Podgląd dokonywanych prac</button>`;
+      else divdatastr += `<button onclick="odbierz(${i})">Odbierz</button>`;
+      divdatastr += `<br/><button onclick="zlomowanie(${i})">Zezłomuj</button><br/><button onclick="czesci(${i})">Sprzedaj na części</button></td></tr>`;
+    }
+    divdatastr += `</table></p>`;
+  } else {
+    divdatastr += `<p>Nie masz jeszcze samochodu w naszym serwisie</p>`;
+  }
+  divdatastr += `<p>Oddaj samochód do serwisu <button onclick="oddaj()">Wypełnij dane</button></p>`;
+  document.getElementById("data").innerHTML = divdatastr;
+}
+function czesci(){
+  confirm()
 }
