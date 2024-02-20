@@ -60,19 +60,17 @@ function checklogin($mode) {
         exit();
     }
 }
-function getOsoba($col="all") {
+function getOsoba() {
     global $conn;
-    if ($col=="all") $col = "id_osoba, imie, nazwisko, dataUr, nrTel, plec, nazwa";
-    $id = ($_SESSION["mode"]=="w") ? "" : "=".$_SESSION['id_osoba'];//test
-    $query = $conn->prepare("select $col from osoba where id_osoba$id");//test id
+    $id = ($_SESSION["mode"]=="w") ? "" : "=".$_SESSION['id_osoba'];
+    $query = $conn->prepare("select id_osoba, imie, nazwisko, dataUr, nrTel, plec, nazwa from osoba where id_osoba$id");
     $query->execute();
     $result = $query->get_result();
     $arr = array();
     while ($row = $result->fetch_assoc()) $arr[]=$row;
     echo json_encode($arr);
 }
-// test down all
-function setOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password) {// i klient
+function setOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password) {
     global $conn;
     $query = $conn->prepare("insert into osoba (imie, nazwisko, dataur, nrtel, plec, nazwa, haslo) values (?, ?, ?, ?, ?, ?, password(?))");
     $query->bind_param("sssidss", $imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password);
@@ -102,20 +100,82 @@ function setUpdOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $passw
     $query->execute();
     echo json_encode("Zaktualizowano dane");
 }
-function setUpdPieniadze($count) {
+function getKlient() {
     global $conn;
-    $query = $conn->prepare("update klient set pieniadzewgroszach=pieniadzewgroszach+? where ?");
-    $query->bind_param("ii", $_SESSION["idmode"]);
+    $id = ($_SESSION["mode"]=="w") ? "" : "=".$_SESSION['id_osoba'];
+    $query = $conn->prepare("select id_klient, pieniadzeWGroszach from osoba where id_osoba$id");
+    $query->execute();
+    $result = $query->get_result();
+    $arr = array();
+    while ($row = $result->fetch_assoc()) $arr[]=$row;
+    echo json_encode($arr);
+} 
+function setRPieniadze($count, $id=null) {
+    global $conn;
+    if (!isset($id)) {
+        $id=$_SESSION["id_osoba"];
+    } elseif ($_SESSION["mode"]!="w") {
+        echo "Brak uprawnień";
+        exit();
+    }
+    $query = $conn->prepare("update klient set pieniadzewgroszach=? where id_osoba=?");
+    $query->bind_param("ii", $id);
     $query->execute();
     $query->close();
 }
 
-
-
-
-
-
-
+function setUpdPieniadze($count, $id=null) {
+    global $conn;
+    if (!isset($id)) {
+        $id=$_SESSION["id_osoba"];
+    } elseif ($_SESSION["mode"]!="w") {
+        echo "Brak uprawnień";
+        exit();
+    }
+    $query = $conn->prepare("update klient set pieniadzewgroszach=pieniadzewgroszach+? where id_osoba=?");
+    $query->bind_param("ii", $id);
+    $query->execute();
+    $query->close();
+}
+function getMechanik() {
+    global $conn;
+    $id = ($_SESSION["mode"]=="w") ? "" : "=".$_SESSION['id_osoba'];
+    $query = $conn->prepare("select id_mechanik, wyplatawgroszach, datazatrudnienia, wykrsztalcenie, etat from mechanik where id_osoba$id");
+    $query->execute();
+    $result = $query->get_result();
+    $arr = array();
+    while ($row = $result->fetch_assoc()) $arr[]=$row;
+    echo json_encode($arr);
+}
+function getSamochod() {
+    global $conn;
+    $id = ($_SESSION["mode"]=="w") ? "" : "=".$_SESSION['idmode'];
+    $query = $conn->prepare("select id_samochod, marka, rocznik, przebiegwcm, model, rejestracja, status from samochod where id_wlasciciel$id");
+    $query->execute();
+    $result = $query->get_result();
+    $arr = array();
+    while ($row = $result->fetch_assoc()) $arr[]=$row;
+    echo json_encode($arr);
+}
+function setSamochod($marka, $rocznik, $przebiegwcm, $model, $rejestracja, $status) {
+    global $conn;
+    $query = $conn->prepare("insert into samchod (id_wlasciciel, marka, rocznik, przebwcm, model, rejestracja, status) values (?, ?, ?, ?, ?, ?, ?)");
+    $query->bind_param("isiisss", $_SESSION["idmode"], $marka, $rocznik, $przebiegwcm, $model, $rejestracja, $status);
+    $query->execute();
+}
+function removeSamochod($id) {
+    global $conn;
+    // if (!isset($id)) {
+    //     $id=$_SESSION["id_osoba"];
+    // } elseif ($_SESSION["mode"]!="w") {
+    //     echo "Brak uprawnień";
+    //     exit();
+    // }
+    $query = $conn->prepare("delete from samochod where id_samochod=?");
+    $query->bind_param("i", $id);
+    $query->execute();
+    $query->close();
+}
 
 
 
