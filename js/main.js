@@ -9,6 +9,9 @@ async function sendData(func, vars) {
       body: formData,
     });
     return await response.json();
+    // let x = await response.text();
+    // console.log(x);
+    // return JSON.parse(x);
   } catch (e) {
     console.error(e);
   }
@@ -100,14 +103,19 @@ class Samochod {
   setSamochod() {
 
   }
-  removeSamochod() {
-
+  async removeSamochod() {
+    await sendData("removeSamochod", [this.id_samochod]);
+    listasamochody();
   }
-  zezlomowanie() {
-
+  async zezlomowanie(val) {
+    alert("Zezłomowałeś samochód");
+    await sendData("setUpdPieniadze", [val])
+    this.removeSamochod();
   }
-  naczesci() {
-    
+  async naczesci(val) {
+    alert("Sprzedałeś samochód na części");
+    await sendData("setUpdPieniadze", [val])
+    this.removeSamochod();
   }
 }
 class Mechanik extends Osoba {
@@ -207,6 +215,16 @@ async function listasamochody() {
   divdatastr += `<p>Oddaj samochód do serwisu <button onclick="oddaj()">Wypełnij dane</button></p>`;
   document.getElementById("data").innerHTML = divdatastr;
 }
-function czesci(){
-  confirm()
+function czesci(i){
+  // sprawdz czy nie ma zleceń 
+  let rand = parseInt((((getRandomInt(10)**(getRandomInt(6)+1))/(getRandomInt(3)+1))+samochody[i].rocznik*(getRandomInt(2)+1))*100);
+  if (confirm("Wycena to: " + rand + "gr, czy napewno chcesz sprzedać?")==true) samochody[i].naczesci(rand);
+}
+function zlomowanie(i) {
+  // sprawdz czy nie ma zleceń 
+  let rand = parseInt((samochody[i].rocznik*(getRandomInt(2)+1))*getRandomInt(10));
+  if (confirm("Wycena to: " + rand + "gr, czy napewno chcesz zezłomować?")==true) samochody[i].zezlomowanie(rand);
+}
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
 }

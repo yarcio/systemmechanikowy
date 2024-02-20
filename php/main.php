@@ -90,6 +90,7 @@ function setOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password
     $query3->bind_param("i", $row["id_osoba"]);
     $query3->execute();
     $query3->close();
+    echo json_encode(true);
 
 }
 function setUpdOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password, $id = null)
@@ -104,7 +105,7 @@ function setUpdOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $passw
     $query = $conn->prepare("update osoba set imie=?, nazwisko=?, dataur=?, nrtel=?, plec=?, nazwa=?, haslo=password(?) where id_osoba=?");
     $query->bind_param("ssssdssi", $imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password, $id);
     $query->execute();
-    echo json_encode("Zaktualizowano dane");
+    echo json_encode(true);
 }
 function getKlient()
 {
@@ -131,6 +132,7 @@ function setRPieniadze($count, $id = null)
     $query->bind_param("ii", $id);
     $query->execute();
     $query->close();
+    echo json_encode(true);
 }
 
 function setUpdPieniadze($count, $id = null)
@@ -142,10 +144,11 @@ function setUpdPieniadze($count, $id = null)
         echo "Brak uprawnień";
         exit();
     }
-    $query = $conn->prepare("update klient set pieniadzewgroszach=pieniadzewgroszach+? where id_osoba=?");
-    $query->bind_param("ii", $id);
+    $query = $conn->prepare("update klient set pieniadzewgroszach=pieniadzewgroszach+? where osoba_id=?");
+    $query->bind_param("ii", $count, $id);
     $query->execute();
     $query->close();
+    echo json_encode(true);
 }
 function getCountSamochod() //id
 {
@@ -174,6 +177,7 @@ function setSamochod($marka, $rocznik, $przebiegwcm, $model, $rejestracja, $stat
     $query = $conn->prepare("insert into samchod (id_wlasciciel, marka, rocznik, przebwcm, model, rejestracja, status) values (?, ?, ?, ?, ?, ?, ?)");
     $query->bind_param("isiisss", $_SESSION["idmode"], $marka, $rocznik, $przebiegwcm, $model, $rejestracja, $status);
     $query->execute();
+    echo json_encode(true);
 }
 function removeSamochod($id)
 {
@@ -188,6 +192,7 @@ function removeSamochod($id)
     $query->bind_param("i", $id);
     $query->execute();
     $query->close();
+    echo json_encode(true);
 }
 function getMechanik()
 {
