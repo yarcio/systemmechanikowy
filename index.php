@@ -10,11 +10,11 @@
 		<form action="/" method="POST">
 		<div class="margines">
 			<div class="padding">
-			<h1><i>Mechanik z pasji</i></h1>
-			<br>LOGIN<br>
-    <input type="text" name="username" required/><br>
-    <input type="password" name="password" required/><br>
-    <input type="submit" name="submit" title="zaloguj" />
+			<h1><b>Mechanik z pasji</b></h1>
+    <input type="text" name="username" placeholder="NAZWA" required/><br>
+    <input type="password" name="password" placeholder="HASŁO" required/><br>
+	<div class="rejestracja"><a href="#">Nie masz konta?</a></div>
+    <div class="alignl"><input type="submit" name="submit" value="ZALOGUJ" /></div>
 </form>
 <?php
 session_start();
