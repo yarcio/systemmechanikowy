@@ -7,12 +7,13 @@
 		<link rel="stylesheet" href="stylesheet/style.css">
 	</head>
 	<body>
-	    <h1>WITAMY U <i>Mechanika z pasji</i></h1>
-		<div class="pad">
-			<div class="kolumna">
-			<form action="/" method="POST">
-    <input type="text" name="username" required/>
-    <input type="password" name="password" required/>
+		<form action="/" method="POST">
+		<div class="margines">
+			<div class="padding">
+			<h1><i>Mechanik z pasji</i></h1>
+			<br>LOGIN<br>
+    <input type="text" name="username" required/><br>
+    <input type="password" name="password" required/><br>
     <input type="submit" name="submit" title="zaloguj" />
 </form>
 <?php
@@ -23,7 +24,7 @@ if (isset($_POST["submit"])) {
     login($_POST["username"], $_POST["password"]);
 }
 ?>
-			</div>
 		</div>
+</div>
 	</body>
 </html>
