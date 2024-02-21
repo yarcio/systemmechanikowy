@@ -8,23 +8,25 @@ async function sendData(func, vars) {
       method: "POST",
       body: formData,
     });
-    return await response.json();
-    // let x = await response.text();
-    // console.log(x);
-    // return JSON.parse(x);
+
+    // return await response.json();
+    let x = await response.text();
+    console.log(x);
+    return JSON.parse(x);
+    //^ Debug only
   } catch (e) {
     console.error(e);
   }
 }
 class Osoba {
   constructor(id_osoba, imie, nazwisko, dataUr, nrTel, plec, nazwa) {
-    this.nazwa = nazwa;
     this.id_osoba = id_osoba;
     this.imie = imie;
     this.nazwisko = nazwisko;
     this.dataUr = dataUr;
     this.nrTel = nrTel;
     this.plec = plec;
+    this.nazwa = nazwa;
   }
   async getOsoba(pos = 0) {
     let response = await sendData("getOsoba");
@@ -41,8 +43,14 @@ class Osoba {
   }
   async setUpdOsoba(imie, nazwisko, dataUr, nrTel, plec, nazwa, haslo) {
     let vars = [imie, nazwisko, dataUr, nrTel, plec, nazwa, haslo];
-    let response = await sendData("setUpdOsoba", vars);
-    alert(response);
+    await sendData("setUpdOsoba", vars);
+    this.imie = imie;
+    this.nazwisko = nazwisko;
+    this.dataUr = dataUr;
+    this.nrTel = nrTel;
+    this.plec = plec;
+    this.nazwa = nazwa;
+    alert("Zaktualizowano dane");
   }
   zadzwon() {
     window.open("tel:" + this.nrTel);
@@ -90,8 +98,8 @@ class Samochod {
     this.status = status;
   }
 
-  async getSamochod(pos = 0) {
-    let response = await sendData("getSamochod");
+  async getSamochod(start = 0, count = 1, id = null, pos = 0) {
+    let response = await sendData("getSamochod", [start, count, id]);
     this.id_samochod = response[pos]["id_samochod"];
     this.marka = response[pos]["marka"];
     this.rocznik = response[pos]["rocznik"];
@@ -100,8 +108,9 @@ class Samochod {
     this.rejestracja = response[pos]["rejestracja"];
     this.status = response[pos]["status"];
   }
-  setSamochod() {
-
+  async addSamochod(marka, rocznik, przebiegWCm, model, rejestracja, status) {
+    await sendData("addSamochod", [marka, rocznik, przebiegWCm, model, rejestracja, status]);
+    listasamochody();
   }
   async removeSamochod() {
     await sendData("removeSamochod", [this.id_samochod]);
@@ -143,11 +152,15 @@ class Mechanik extends Osoba {
     this.wyksztalcenie = response[posM]["wyksztalcenie"];
     this.etat = response[posM]["etat"];
   }
+  async getCountAllSamochod() {
+    let response = await sendData("getCountSamochod", ["all"]);
+    return response;
+  }
   wyplata() {
-    //func
+    console.log("Wypłata");
   }
   zwolnij() {
-    //func
+    console.log("Zwolnienie");
   }
 }
 class Zlecenie {
@@ -159,43 +172,45 @@ class Zlecenie {
     this.dataZakonczenia = dataZakonczenia;
   }
 }
-
-// var funcname = "test";
-// var json = [3, 4];
-// alert(await sendData(funcname, json)));
-var kontoklient;
 async function konto() {
-  kontoklient = new Osoba();
-  await kontoklient.getOsoba();
-  document.getElementById("data").innerHTML = `<p>Imie:<br/><input type='text' id='imie' value='${kontoklient.imie}'/></p>
-  <p>Nazwisko:<br/><input type='text' id='nazwisko' value='${kontoklient.nazwisko}'/></p>
-  <p>Data urodzenia:<br/><input type='date' id='dataUr' value='${kontoklient.dataUr}'/></p>
-  <p>Numer telefonu:<br/><input type='text' id='nrTel' value='${kontoklient.nrTel}'/></p>
-  <p>Data urodzenia:<br/><input type='date' id='dataUr' value='${kontoklient.dataUr}'/></p>
-  <p>Płeć: <output id="jakaplec">${kontoklient.plec}</output><br>
-  K<input id="plec" type="range" min="-1" max="1" step="0.01" value=${kontoklient.plec} oninput="sliderRefresh()">M</p>
-  <p>Nazwa użytkownika:<br/><input type='text' id='nazwa' value='${kontoklient.nazwa}'/></p>
+  document.getElementById("data").innerHTML = `<p>Imie:<br/><input type='text' id='imie' value='${user.imie}'/></p>
+  <p>Nazwisko:<br/><input type='text' id='nazwisko' value='${user.nazwisko}'/></p>
+  <p>Data urodzenia:<br/><input type='date' id='dataUr' value='${user.dataUr}'/></p>
+  <p>Numer telefonu:<br/><input type='text' id='nrTel' value='${user.nrTel}'/></p>
+  <p>Płeć: <output id="jakaplec">${user.plec}</output><br>
+  K<input id="plec" type="range" min="-1" max="1" step="0.01" value=${user.plec} oninput="sliderRefresh()">M</p>
+  <p>Nazwa użytkownika:<br/><input type='text' id='nazwa' value='${user.nazwa}'/></p>
   <p>Hasło:<br/><input type="password" id="haslo"/></p>
   <p>Potwierdź hasło:<br/><input type="password" id="powtwierdzhaslo"/></p>
-  <p><input type="submit" value="Zaktualizuj" onclick="zaktualizujKonto()"/></p>`;
+  <p><button onclick="backKonto()">Powrót</button> <input type="submit" value="Zaktualizuj" onclick="zaktualizujKonto()"/></p>`;
+  //sprawdź unikatowość nazwy użytkownika NAJLEPIEJ PRZED
+}
+function backKonto() {
+  if (mode == "k") listasamochody();
+  else if (mode == "m") listazlecenia();
+  else window.location("/");
 }
 function zaktualizujKonto() {
   if (document.getElementById("haslo").value != document.getElementById("powtwierdzhaslo").value) alert("Hasła nie są takie same!");
   else if (document.getElementById("haslo").value.length < 4) alert("Hasło musi mieć przynajmniej 4 znaki!");
-  else kontoklient.setUpdOsoba(document.getElementById("imie").value, document.getElementById("nazwisko").value, document.getElementById("dataUr").value, document.getElementById("nrTel").value, document.getElementById("plec").value, document.getElementById("nazwa").value, document.getElementById("haslo").value);
+  else user.setUpdOsoba(document.getElementById("imie").value, document.getElementById("nazwisko").value, document.getElementById("dataUr").value, document.getElementById("nrTel").value, document.getElementById("plec").value, document.getElementById("nazwa").value, document.getElementById("haslo").value);
 
 }
 function sliderRefresh() {
   document.getElementById("jakaplec").innerHTML = document.getElementById("plec").value;
 }
-var klientObj;
+var mode;
+var user;
 var samochody;
+async function initKlient() {
+  mode = "k";
+  user = new Klient();
+  await user.getKlient();
+  listasamochody();
+}
 async function listasamochody() {
-  klientObj = new Klient();
-  await klientObj.getKlient();
-
-  let samochodCount = await klientObj.getCountSamochod();
-  let divdatastr = `<p>Pieniądze: ${klientObj.pieniadzeWGroszach}gr</p>`;
+  let samochodCount = await user.getCountSamochod();
+  let divdatastr = `<p>Pieniądze: ${user.pieniadzeWGroszach}gr</p>`;
   if (samochodCount > 0) {
     samochody = [];
     divdatastr += `<p><table><caption>Lista twoich samochodów</caption><tr><th>Marka</th><th>Rocznik</th><th>Przebieg</th><th>Model</th><th>Rejestracja</th><th>Status</th><th>Działania</th></tr>`;
@@ -212,19 +227,81 @@ async function listasamochody() {
   } else {
     divdatastr += `<p>Nie masz jeszcze samochodu w naszym serwisie</p>`;
   }
-  divdatastr += `<p>Oddaj samochód do serwisu <button onclick="oddaj()">Wypełnij dane</button></p>`;
+  divdatastr += `<p>Oddaj samochód do serwisu <button onclick="dodajsamochod()">Wypełnij dane</button></p>
+  <p><button onclick='konto()'>Twoje konto</button></p>`;
   document.getElementById("data").innerHTML = divdatastr;
 }
-function czesci(i){
-  // sprawdz czy nie ma zleceń 
-  let rand = parseInt((((getRandomInt(10)**(getRandomInt(6)+1))/(getRandomInt(3)+1))+samochody[i].rocznik*(getRandomInt(2)+1))*100);
-  if (confirm("Wycena to: " + rand + "gr, czy napewno chcesz sprzedać?")==true) samochody[i].naczesci(rand);
+var nowysamochod;
+function dodajsamochod() {
+  nowysamochod = new Samochod();
+  document.getElementById("data").innerHTML = `
+  <p>Marka:<br/><input type="text" id="marka"/></p>
+  <p>Rocznik:<br/><input type="number" id="rocznik"/></p>
+  <p>Przebieg (cm):<br/><input type="number" id="przebieg"/></p>
+  <p>Model:<br/><input type="text" id="model"/></p>
+  <p>Rejestracja:<br/><input type="text" id="rejestracja"/></p>
+  <p>Powód odwiedzin w serwisie:<br/><input type="text" id="status"/></p>
+  <button onclick="listasamochody()">Anuluj</button> 
+  <button onclick='nowysamochod.addSamochod(document.getElementById("marka").value, document.getElementById("rocznik").value, document.getElementById("przebieg").value, document.getElementById("model").value, document.getElementById("rejestracja").value, "Oczekuje na przyjęcie zlecenia, powód wizyty: " + document.getElementById("status").value)'>Zatwierdź</button>`;
+}
+function czesci(i) {
+  let rand = parseInt((((getRandomInt(10) ** (getRandomInt(6) + 1)) / (getRandomInt(3) + 1)) + samochody[i].rocznik * (getRandomInt(2) + 1)) * 100);
+  if (confirm("Wycena to: " + rand + "gr, czy napewno chcesz sprzedać? Działanie te anuluje wszystkie zlecenia") == true) samochody[i].naczesci(rand);
 }
 function zlomowanie(i) {
-  // sprawdz czy nie ma zleceń 
-  let rand = parseInt((samochody[i].rocznik*(getRandomInt(2)+1))*getRandomInt(10));
-  if (confirm("Wycena to: " + rand + "gr, czy napewno chcesz zezłomować?")==true) samochody[i].zezlomowanie(rand);
+  let rand = parseInt((samochody[i].rocznik * (getRandomInt(2) + 1)) * getRandomInt(10));
+  if (confirm("Wycena to: " + rand + "gr, czy napewno chcesz zezłomować? Działanie te anuluje wszystkie zlecenia") == true) samochody[i].zezlomowanie(rand);
 }
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
+}
+async function initMechanik() {
+  mode = "m";
+  user = new Mechanik();
+  await user.getMechanik();
+  listazlecenia();
+}
+function mechanikinfo() {
+  document.getElementById("data").innerHTML = `<p>Wypłata miesięczna:<br/>${user.wyplataWGroszach}gr</p>
+  <p>Data zatrudnienia:<br/>${user.dataZatrudnienia}</p>
+  <p>Wykształcenie:<br/>${user.wyksztalcenie}</p>
+  <p>Etat:<br/>${user.etat}</p>
+  <p><button onclick="listazlecenia()">Powrót</button></p>`;
+}
+async function listazlecenia() {
+  let divdatastr = "";
+  divdatastr += `<p>Podejmij się nowego zlecenia <button onclick="nowezlecenie()">Wybierz samochód</button></p>
+  <p><button onclick='konto()'>Twoje konto</button> <button onclick="mechanikinfo()">Informacje o tobie</button></p>`;
+  document.getElementById("data").innerHTML = divdatastr;
+}
+var textarea;
+async function nowezlecenie() {
+  let samochodCount = await user.getCountAllSamochod();
+  console.log(samochodCount);
+  let divdatastr = "";
+  if (samochodCount > 0) {
+    samochody = [];
+    divdatastr += `<p><table><caption>Lista samochodów w serwisie</caption><tr><th>Marka</th><th>Rocznik</th><th>Przebieg</th><th>Model</th><th>Rejestracja</th><th>Status</th><th>Działania</th></tr>`;
+    for (let i = 0; i < samochodCount; i++) {
+      samochody[i] = new Samochod();
+      await samochody[i].getSamochod(i, 1, "all");
+      divdatastr += `<tr><td>${samochody[i].marka}</td><td>${samochody[i].rocznik}r.</td><td>${samochody[i].przebiegWCm}cm</td>
+    <td>${samochody[i].model}</td><td>${samochody[i].rejestracja}</td><td><textarea oninput="autoResize(this);" onclick="autoResize(this);" spellcheck="false" id="status${i}">${samochody[i].status}</textarea></td><td>`;
+      divdatastr += `<button onclick="podejmijzlecenie(${i})">Podejmij się zlecenia</button><br/><button onclick="zmienstatus(${i})">Zmień status</button><br/>
+      <button onclick="kradziez(${i})">Ukradnij</button></td></tr>`;
+    }
+    divdatastr += `</table></p>`;
+  } else {
+    divdatastr += `<p>Nie ma aktualnie samochodów w serwisie</p>`;
+  }
+  // textarea = document.getElementsByClassName("textAreaResize");
+  // textarea.addEventListener('input', autoResize, false);
+  divdatastr += `<p><button onclick="listazlecenia()">Powrót</button></p>`;
+  document.getElementById("data").innerHTML = divdatastr;
+}
+
+
+function autoResize(a) {
+  a.style.height = 'auto';
+  a.style.height = a.scrollHeight + 'px';
 }

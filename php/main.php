@@ -103,7 +103,7 @@ function setUpdOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $passw
     }
     global $conn;
     $query = $conn->prepare("update osoba set imie=?, nazwisko=?, dataur=?, nrtel=?, plec=?, nazwa=?, haslo=password(?) where id_osoba=?");
-    $query->bind_param("ssssdssi", $imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password, $id);
+    $query->bind_param("sssssssi", $imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password, $id);
     $query->execute();
     echo json_encode(true);
 }
@@ -150,20 +150,21 @@ function setUpdPieniadze($count, $id = null)
     $query->close();
     echo json_encode(true);
 }
-function getCountSamochod() //id
+function getCountSamochod($id = null)
 {
     global $conn;
-    $id = ($_SESSION["mode"] == "w") ? "" : "=" . $_SESSION['idmode'];
+    $id = ($id=="all") ? "" : "=" . $_SESSION['idmode'];
     $query = $conn->prepare("select id_samochod from samochod where id_wlasciciel$id");
     $query->execute();
     $result = $query->get_result();
     echo json_encode($result->num_rows);
 }
-function getSamochod()
+function getSamochod($start = 0, $count = 1000000000, $id = null)
 {
     global $conn;
-    $id = ($_SESSION["mode"] == "w") ? "" : "=" . $_SESSION['idmode'];
-    $query = $conn->prepare("select id_samochod, marka, rocznik, przebwcm, model, rejestracja, status from samochod where id_wlasciciel$id");
+    $id = ($id=="all") ? "" : "=" . $_SESSION['idmode'];
+    $query = $conn->prepare("select id_samochod, marka, rocznik, przebwcm, model, rejestracja, status from samochod where id_wlasciciel$id limit ?, ?");
+    $query->bind_param("ii", $start, $count);
     $query->execute();
     $result = $query->get_result();
     $arr = array();
@@ -171,10 +172,13 @@ function getSamochod()
         $arr[] = $row;
     echo json_encode($arr);
 }
-function setSamochod($marka, $rocznik, $przebiegwcm, $model, $rejestracja, $status)
+function setUpdStatus($status) {
+    
+}
+function addSamochod($marka, $rocznik, $przebiegwcm, $model, $rejestracja, $status)
 {
     global $conn;
-    $query = $conn->prepare("insert into samchod (id_wlasciciel, marka, rocznik, przebwcm, model, rejestracja, status) values (?, ?, ?, ?, ?, ?, ?)");
+    $query = $conn->prepare("insert into samochod (id_wlasciciel, marka, rocznik, przebwcm, model, rejestracja, status) values (?, ?, ?, ?, ?, ?, ?)");
     $query->bind_param("isiisss", $_SESSION["idmode"], $marka, $rocznik, $przebiegwcm, $model, $rejestracja, $status);
     $query->execute();
     echo json_encode(true);
@@ -182,12 +186,6 @@ function setSamochod($marka, $rocznik, $przebiegwcm, $model, $rejestracja, $stat
 function removeSamochod($id)
 {
     global $conn;
-    // if (!isset($id)) {
-    //     $id=$_SESSION["id_osoba"];
-    // } elseif ($_SESSION["mode"]!="w") {
-    //     echo "Brak uprawnień";
-    //     exit();
-    // }
     $query = $conn->prepare("delete from samochod where id_samochod=?");
     $query->bind_param("i", $id);
     $query->execute();
@@ -198,7 +196,7 @@ function getMechanik()
 {
     global $conn;
     $id = ($_SESSION["mode"] == "w") ? "" : "=" . $_SESSION['id_osoba'];
-    $query = $conn->prepare("select id_mechanik, wyplatawgroszach, datazatrudnienia, wykrsztalcenie, etat from mechanik where id_osoba$id");
+    $query = $conn->prepare("select id_mechanik, wyplatawgroszach, datazatrudnienia, wyksztalcenie, etat from mechanik where osoba_id$id");
     $query->execute();
     $result = $query->get_result();
     $arr = array();
@@ -206,7 +204,41 @@ function getMechanik()
         $arr[] = $row;
     echo json_encode($arr);
 }
-
+function setZlecenie($mechanik_id, $samochod_id, $problem, $dataRozpoczecia, $dataZakonczenia)
+{
+    global $conn;
+    $query = $conn->prepare("insert into zlecenie (mechanik_id, samochod_id, problem, datarozpoczecia, datazakonczenia) values (?, ?, ?, ?, ?)");
+    $query->bind_param("iisss", $mechanik_id, $samochod_id, $problem, $dataRozpoczecia, $dataZakonczenia);
+    $query->execute();
+    $query->close();
+    echo json_encode(true);
+}
+function getZlecenie($mechanik_id, $samochod_id)
+{
+    global $conn;
+    $query = $conn->prepare("select id_zlecenia, mechanik_id, samochod_id, problem, datarozpoczecia, datazakoncznenia from zlecenie where mechanik_id=? or samochod_id=?");
+    $query->bind_param("ii", $mechanik_id, $samochod_id);
+    $query->execute();
+    $query->close();
+    echo json_encode(true);
+}
+function setUpdZlecenie($dataZakonczenia, $id)
+{
+    global $conn;
+    $query = $conn->prepare("update zlecenie set datazakonczenia=? where id_zlecenia=?");
+    $query->bind_param("s", $dataZakonczenia, $id);
+    $query->execute();
+    $query->close();
+    echo json_encode(true);
+}
+function removeZlecenie($id, $samochod_id=0) {
+    global $conn;
+    $query = $conn->prepare("delete from zlecenie where id_zlecenia=? or samochod_id=?");
+    $query->bind_param("ii", $id, $samochod_id);
+    $query->execute();
+    $query->close();
+    echo json_encode(true);
+}
 
 
 function test($a = 1, $b = 2)
