@@ -73,7 +73,7 @@ CREATE TABLE `osoba` (
   `dataUr` date DEFAULT NULL,
   `nrTel` text DEFAULT NULL,
   `plec` double DEFAULT NULL,
-  `nazwa` text DEFAULT NULL unique,
+  `nazwa` varchar(255) DEFAULT NULL unique,
   `haslo` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
