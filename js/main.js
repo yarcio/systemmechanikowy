@@ -348,7 +348,7 @@ async function nowezlecenie() {
 }
 function autoResize(a) {
   a.style.height = 'auto';
-  a.style.height = a.scrollHeight + 'px';
+  a.style.height = a.scrollHeight + 10 + 'px';
 }
 async function rejestracja() {
   user = new Klient();

@@ -128,22 +128,6 @@ function getKlient()
         $arr[] = $row;
     echo json_encode($arr);
 }
-// function setRPieniadze($count, $id = null)
-// {
-//     global $conn;
-//     if (!isset($id)) {
-//         $id = $_SESSION["id_osoba"];
-//     } elseif ($_SESSION["mode"] != "w") {
-//         echo "Brak uprawnień";
-//         exit();
-//     }
-//     $query = $conn->prepare("update klient set pieniadzewgroszach=? where id_osoba=?");
-//     $query->bind_param("ii", $id);
-//     $query->execute();
-//     $query->close();
-//     echo json_encode(true);
-// }
-
 function setUpdPieniadze($count, $id = null)
 {
     global $conn;
@@ -254,16 +238,14 @@ function setUpdZlecenie($dataZakonczenia, $id)
     $query->close();
     echo json_encode(true);
 }
-// function removeZlecenie($id, $samochod_id=0) {
-//     global $conn;
-//     $query = $conn->prepare("delete from zlecenie where id_zlecenia=? or samochod_id=?");
-//     $query->bind_param("ii", $id, $samochod_id);
-//     $query->execute();
-//     $query->close();
-//     echo json_encode(true);
-// }
-
-
+function removeZlecenie($id, $samochod_id=0) {
+    global $conn;
+    $query = $conn->prepare("delete from zlecenie where id_zlecenia=? or samochod_id=?");
+    $query->bind_param("ii", $id, $samochod_id);
+    $query->execute();
+    $query->close();
+    echo json_encode(true);
+}
 function test($a = 1, $b = 2)
 {
     $sum = $a + $b;
