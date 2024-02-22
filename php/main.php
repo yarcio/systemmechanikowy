@@ -10,7 +10,7 @@ function login($username, $password)
     global $conn;
     $_SESSION["sessionstatus"] = 0;
     $_SESSION["id_osoba"] = 0;
-    $query = $conn->prepare("SELECT id_osoba FROM osoba WHERE nazwa=? AND haslo=PASSWORD(?)");
+    $query = $conn->prepare("SELECT id_osoba FROM osoba WHERE nazwa=? AND haslo=md5(?)");
     $query->bind_param("ss", $username, $password);
     $query->execute();
     $result = $query->get_result();
@@ -77,7 +77,7 @@ function getOsoba()
 function setOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password)
 {
     global $conn;
-    $query = $conn->prepare("insert into osoba (imie, nazwisko, dataur, nrtel, plec, nazwa, haslo) values (?, ?, ?, ?, ?, ?, password(?))");
+    $query = $conn->prepare("insert into osoba (imie, nazwisko, dataur, nrtel, plec, nazwa, haslo) values (?, ?, ?, ?, ?, ?, md5(?))");
     $query->bind_param("sssidss", $imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password);
     $query->execute();
     $query->close();
@@ -102,7 +102,7 @@ function setUpdOsoba($imie, $nazwisko, $dataur, $nrtel, $plec, $username, $passw
         exit();
     }
     global $conn;
-    $query = $conn->prepare("update osoba set imie=?, nazwisko=?, dataur=?, nrtel=?, plec=?, nazwa=?, haslo=password(?) where id_osoba=?");
+    $query = $conn->prepare("update osoba set imie=?, nazwisko=?, dataur=?, nrtel=?, plec=?, nazwa=?, haslo=md5(?) where id_osoba=?");
     $query->bind_param("sssssssi", $imie, $nazwisko, $dataur, $nrtel, $plec, $username, $password, $id);
     $query->execute();
     echo json_encode(true);
