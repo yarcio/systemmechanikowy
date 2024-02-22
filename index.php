@@ -1,3 +1,11 @@
+<?php
+session_start();
+session_destroy();
+if (isset($_POST["submit"])) {
+    include $_SERVER["DOCUMENT_ROOT"]."/php/main.php";
+    login($_POST["username"], $_POST["password"]);
+}
+?>
 <!DOCTYPE html>
 <html lang="pl-PL">
 	<head>
@@ -16,14 +24,6 @@
 	<div class="rejestracja"><a href="/rejestracja.php">Nie masz konta?</a></div>
     <div class="alignl"><input type="submit" name="submit" value="ZALOGUJ" /></div>
 </form>
-<?php
-session_start();
-session_destroy();
-if (isset($_POST["submit"])) {
-    include $_SERVER["DOCUMENT_ROOT"]."/php/main.php";
-    login($_POST["username"], $_POST["password"]);
-}
-?>
 		</div>
 </div>
 	</body>
