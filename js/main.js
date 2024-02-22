@@ -7,7 +7,6 @@ async function sendData(func, vars) {
       method: "POST",
       body: formData,
     });
-
     // return await response.json();
     let x = await response.text();
     console.log(x);
