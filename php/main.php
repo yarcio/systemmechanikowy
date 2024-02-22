@@ -225,32 +225,43 @@ function setZlecenie($mechanik_id, $samochod_id, $problem, $dataRozpoczecia, $da
     $query->close();
     echo json_encode(true);
 }
-function getZlecenie($mechanik_id, $samochod_id)
-{
+function getCountZlecenie($mechanik_id=null, $samochod_id=null) {
     global $conn;
-    $query = $conn->prepare("select id_zlecenia, mechanik_id, samochod_id, problem, datarozpoczecia, datazakoncznenia from zlecenie where mechanik_id=? or samochod_id=?");
+    $query = $conn->prepare("select id_zlecenia from zlecenie where mechanik_id=? or samochod_id=?");
     $query->bind_param("ii", $mechanik_id, $samochod_id);
     $query->execute();
-    $query->close();
-    echo json_encode(true);
+    $result = $query->get_result();
+    echo json_encode($result->num_rows);
+}
+function getZlecenie($start = 0, $count = 1000000000, $mechanik_id=null, $samochod_id=null)
+{
+    global $conn;
+    $query = $conn->prepare("select id_zlecenia, mechanik_id, samochod_id, problem, datarozpoczecia, datazakonczenia from zlecenie where mechanik_id=? or samochod_id=? limit ?, ?");
+    $query->bind_param("iiii", $mechanik_id, $samochod_id, $start, $count);
+    $query->execute();
+    $result = $query->get_result();
+    $arr = array();
+    while ($row = $result->fetch_assoc())
+        $arr[] = $row;
+    echo json_encode($arr);
 }
 function setUpdZlecenie($dataZakonczenia, $id)
 {
     global $conn;
     $query = $conn->prepare("update zlecenie set datazakonczenia=? where id_zlecenia=?");
-    $query->bind_param("s", $dataZakonczenia, $id);
+    $query->bind_param("ss", $dataZakonczenia, $id);
     $query->execute();
     $query->close();
     echo json_encode(true);
 }
-function removeZlecenie($id, $samochod_id=0) {
-    global $conn;
-    $query = $conn->prepare("delete from zlecenie where id_zlecenia=? or samochod_id=?");
-    $query->bind_param("ii", $id, $samochod_id);
-    $query->execute();
-    $query->close();
-    echo json_encode(true);
-}
+// function removeZlecenie($id, $samochod_id=0) {
+//     global $conn;
+//     $query = $conn->prepare("delete from zlecenie where id_zlecenia=? or samochod_id=?");
+//     $query->bind_param("ii", $id, $samochod_id);
+//     $query->execute();
+//     $query->close();
+//     echo json_encode(true);
+// }
 
 
 function test($a = 1, $b = 2)

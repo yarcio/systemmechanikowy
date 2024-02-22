@@ -164,16 +164,43 @@ class Mechanik extends Osoba {
   zwolnij() {
     console.log("Zwolnienie");
   }
+  async getCountZlecenie() {
+    let response = await sendData("getCountZlecenie", [this.id_mechanik, null])
+    return response;
+  }
 }
 class Zlecenie {
-  constructor(id_mechanik, id_samochod, problem, dataRozpoczecia, dataZakonczenia) {
+  constructor(id_zlecenia, id_mechanik, id_samochod, problem, dataRozpoczecia, dataZakonczenia) {
+    this.id_zlecenia = id_zlecenia;
     this.id_mechanik = id_mechanik;
     this.id_samochod = id_samochod;
     this.problem = problem;
     this.dataRozpoczecia = dataRozpoczecia;
     this.dataZakonczenia = dataZakonczenia;
   }
+
+  async getZlecenie(start = 0, count = 1, mechanik_id = null, samochod_id = null, pos = 0) {
+    let response = await sendData("getZlecenie", [start, count, mechanik_id, samochod_id]);
+    this.id_zlecenia = response[pos]["id_zlecenia"];
+    this.id_mechanik = response[pos]["id_mechanik"];
+    this.id_samochod = response[pos]["id_samochod"];
+    this.problem = response[pos]["problem"];
+    this.dataRozpoczecia = response[pos]["datarozpoczecia"];
+    this.dataZakonczenia = response[pos]["datazakonczenia"];
+  }
+  async zakoncz() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    let fulldate = yyyy + "-" + mm + "-" + dd
+    await sendData("setUpdZlecenie", [fulldate, this.id_zlecenia])
+    listazlecenia();
+  }
 }
+
 async function konto() {
   document.getElementById("data").innerHTML = `<p>Imie:<br/><input type='text' id='imie' value='${user.imie}'/></p>
   <p>Nazwisko:<br/><input type='text' id='nazwisko' value='${user.nazwisko}'/></p>
@@ -273,16 +300,33 @@ function mechanikinfo() {
   <p>Etat:<br/>${user.etat}</p>
   <p><button onclick="listazlecenia()">Powrót</button></p>`;
 }
+var zlecenia;
 async function listazlecenia() {
   let divdatastr = "";
+  let zlecenieCount = await user.getCountZlecenie();
+  if (zlecenieCount > 0) {
+    zlecenia = [];
+    divdatastr += `<p><table><caption>Lista twoich zleceń</caption><tr><th>Problem</th><th>Rozpoczęto</th><th>Zakończono</th><th>Działania</th></tr>`;
+    for (let i = 0; i < zlecenieCount; i++) {
+      zlecenia[i] = new Zlecenie();
+      await zlecenia[i].getZlecenie(i, 1, user.id_mechanik);
+      divdatastr += `<tr><td>${zlecenia[i].problem}</td><td>${zlecenia[i].dataRozpoczecia}</td><td>`;
+      if (zlecenia[i].dataZakonczenia == null) divdatastr += "Nie zakończono";
+      else divdatastr += zlecenia[i].dataZakonczenia;
+      divdatastr += `<td>`;
+      if (zlecenia[i].dataZakonczenia == null) divdatastr += `<button onclick="zlecenia[${i}].zakoncz()">Zakończ</button>`;
+      divdatastr += `</td></td></tr>`;
+    }
+    divdatastr += `</table></p>`;
+  } else {
+    divdatastr += `<p>Nie podjąłeś się jeszcze żadnego zlecenia</p>`;
+  }
   divdatastr += `<p>Podejmij się nowego zlecenia <button onclick="nowezlecenie()">Wybierz samochód</button></p>
   <p><button onclick='konto()'>Twoje konto</button> <button onclick="mechanikinfo()">Informacje o tobie</button></p>`;
   document.getElementById("data").innerHTML = divdatastr;
 }
-var textarea;
 async function nowezlecenie() {
   let samochodCount = await user.getCountAllSamochod();
-  console.log(samochodCount);
   let divdatastr = "";
   if (samochodCount > 0) {
     samochody = [];

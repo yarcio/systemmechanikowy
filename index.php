@@ -1,11 +1,3 @@
-<?php
-session_start();
-session_destroy();
-if (isset($_POST["submit"])) {
-    include $_SERVER["DOCUMENT_ROOT"]."/php/main.php";
-    login($_POST["username"], $_POST["password"]);
-}
-?>
 <!DOCTYPE html>
 <html lang="pl-PL">
 	<head>
@@ -23,6 +15,14 @@ if (isset($_POST["submit"])) {
     <input type="password" name="password" placeholder="HASŁO" required/><br>
 	<div class="rejestracja"><a href="/rejestracja.php">Nie masz konta?</a></div>
     <div class="alignl"><input type="submit" name="submit" value="ZALOGUJ" /></div>
+<?php
+session_start();
+session_destroy();
+if (isset($_POST["submit"])) {
+    include $_SERVER["DOCUMENT_ROOT"]."/php/main.php";
+    login($_POST["username"], $_POST["password"]);
+}
+?>
 </form>
 		</div>
 </div>
