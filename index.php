@@ -4,7 +4,7 @@
 	    <meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <title>MECHANIK Z PASJI</title>
-		<link rel="stylesheet" href="stylesheet/style.css">
+		<link rel="stylesheet" type="text/css" href="stylesheet/style.css?<?php echo time(); ?>">
 	</head>
 	<body>
 		<form action="/" method="POST">
