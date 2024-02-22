@@ -11,7 +11,9 @@
 session_start();
 session_destroy();
 ?>
-<script src="/js/main.js"></script>
+<h1>Mechanik z pasji</h1>
+
+<script src="js/main.js"></script>
 <p>Imie:<br /><input type='text' id='imie'/></p>
 <p>Nazwisko:<br /><input type='text' id='nazwisko'/></p>
 <p>Data urodzenia:<br /><input type='date' id='dataUr'/></p>
