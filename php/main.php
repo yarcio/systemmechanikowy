@@ -62,6 +62,15 @@ function checklogin($mode)
         exit();
     }
 }
+function checkUsername($username, $user="") {
+    global $conn;
+    $query = $conn->prepare("SELECT id_osoba FROM osoba WHERE nazwa=? and nazwa!=?");
+    $query->bind_param("ss", $username, $user);
+    $query->execute();
+    $result = $query->get_result();
+    if ($result->num_rows == 1) echo json_encode(true);
+    else echo json_encode(false);
+}
 function getOsoba()
 {
     global $conn;
@@ -119,21 +128,21 @@ function getKlient()
         $arr[] = $row;
     echo json_encode($arr);
 }
-function setRPieniadze($count, $id = null)
-{
-    global $conn;
-    if (!isset($id)) {
-        $id = $_SESSION["id_osoba"];
-    } elseif ($_SESSION["mode"] != "w") {
-        echo "Brak uprawnień";
-        exit();
-    }
-    $query = $conn->prepare("update klient set pieniadzewgroszach=? where id_osoba=?");
-    $query->bind_param("ii", $id);
-    $query->execute();
-    $query->close();
-    echo json_encode(true);
-}
+// function setRPieniadze($count, $id = null)
+// {
+//     global $conn;
+//     if (!isset($id)) {
+//         $id = $_SESSION["id_osoba"];
+//     } elseif ($_SESSION["mode"] != "w") {
+//         echo "Brak uprawnień";
+//         exit();
+//     }
+//     $query = $conn->prepare("update klient set pieniadzewgroszach=? where id_osoba=?");
+//     $query->bind_param("ii", $id);
+//     $query->execute();
+//     $query->close();
+//     echo json_encode(true);
+// }
 
 function setUpdPieniadze($count, $id = null)
 {
@@ -186,6 +195,9 @@ function addSamochod($marka, $rocznik, $przebiegwcm, $model, $rejestracja, $stat
 function removeSamochod($id)
 {
     global $conn;
+    $query = $conn->prepare("delete from zlecenie where samochod_id=?");
+    $query->bind_param("i", $id);
+    $query->execute();
     $query = $conn->prepare("delete from samochod where id_samochod=?");
     $query->bind_param("i", $id);
     $query->execute();

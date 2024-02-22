@@ -13,7 +13,7 @@
 			<h1><b>Mechanik z pasji</b></h1>
     <input type="text" name="username" placeholder="NAZWA" required/><br>
     <input type="password" name="password" placeholder="HASŁO" required/><br>
-	<div class="rejestracja"><a href="#">Nie masz konta?</a></div>
+	<div class="rejestracja"><a href="/rejestracja.php">Nie masz konta?</a></div>
     <div class="alignl"><input type="submit" name="submit" value="ZALOGUJ" /></div>
 </form>
 <?php

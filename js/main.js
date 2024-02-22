@@ -1,4 +1,3 @@
-//unique username test
 async function sendData(func, vars) {
   const formData = new FormData();
   formData.append("func", func);
@@ -38,9 +37,6 @@ class Osoba {
     this.plec = response[pos]["plec"];
     this.nazwa = response[pos]["nazwa"];
   }
-  setOsoba() {
-
-  }
   async setUpdOsoba(imie, nazwisko, dataUr, nrTel, plec, nazwa, haslo) {
     let vars = [imie, nazwisko, dataUr, nrTel, plec, nazwa, haslo];
     await sendData("setUpdOsoba", vars);
@@ -62,12 +58,6 @@ class Klient extends Osoba {
     this.id_klient = id_klient;
     this.pieniadzeWGroszach = pieniadzeWGroszach;
   }
-  setUpdPieniadze() {
-
-  }
-  setRPieniadze() {
-
-  }
   async getKlient(pos = 0, posK = 0) {
     let response = await sendData("getOsoba");
     this.id_osoba = response[pos]["id_osoba"];
@@ -81,9 +71,21 @@ class Klient extends Osoba {
     this.id_klient = response[posK]["id_klient"];
     this.pieniadzeWGroszach = response[posK]["pieniadzewgroszach"];
   }
-  async getCountSamochod() {//id
+  async getCountSamochod() {
     let response = await sendData("getCountSamochod");
     return response;
+  }
+  async setOsoba(imie, nazwisko, dataUr, nrTel, plec, nazwa, haslo) {
+    let vars = [imie, nazwisko, dataUr, nrTel, plec, nazwa, haslo];
+    await sendData("setOsoba", vars);
+    this.imie = imie;
+    this.nazwisko = nazwisko;
+    this.dataUr = dataUr;
+    this.nrTel = nrTel;
+    this.plec = plec;
+    this.nazwa = nazwa;
+    alert("Utworzono konto");
+    window.open("/");
   }
 
 }
@@ -183,17 +185,20 @@ async function konto() {
   <p>Hasło:<br/><input type="password" id="haslo"/></p>
   <p>Potwierdź hasło:<br/><input type="password" id="powtwierdzhaslo"/></p>
   <p><button onclick="backKonto()">Powrót</button> <input type="submit" value="Zaktualizuj" onclick="zaktualizujKonto()"/></p>`;
-  //sprawdź unikatowość nazwy użytkownika NAJLEPIEJ PRZED
 }
 function backKonto() {
   if (mode == "k") listasamochody();
   else if (mode == "m") listazlecenia();
   else window.location("/");
 }
-function zaktualizujKonto() {
-  if (document.getElementById("haslo").value != document.getElementById("powtwierdzhaslo").value) alert("Hasła nie są takie same!");
-  else if (document.getElementById("haslo").value.length < 4) alert("Hasło musi mieć przynajmniej 4 znaki!");
-  else user.setUpdOsoba(document.getElementById("imie").value, document.getElementById("nazwisko").value, document.getElementById("dataUr").value, document.getElementById("nrTel").value, document.getElementById("plec").value, document.getElementById("nazwa").value, document.getElementById("haslo").value);
+async function zaktualizujKonto() {
+  if (await sendData("checkUsername", [document.getElementById("nazwa").value, user.nazwa])) { alert("Ta nazwa użytkownika jest już zajęta!"); }
+  else {
+    if (document.getElementById("haslo").value != document.getElementById("powtwierdzhaslo").value) alert("Hasła nie są takie same!");
+    else if (document.getElementById("haslo").value.length < 4) alert("Hasło musi mieć przynajmniej 4 znaki!");
+    else if (document.getElementById("nazwa").value.length < 1) alert("Nazwa użykownika musi mieć przynajmniej 1 znak!");
+    else user.setUpdOsoba(document.getElementById("imie").value, document.getElementById("nazwisko").value, document.getElementById("dataUr").value, document.getElementById("nrTel").value, document.getElementById("plec").value, document.getElementById("nazwa").value, document.getElementById("haslo").value);
+  }
 
 }
 function sliderRefresh() {
@@ -294,14 +299,20 @@ async function nowezlecenie() {
   } else {
     divdatastr += `<p>Nie ma aktualnie samochodów w serwisie</p>`;
   }
-  // textarea = document.getElementsByClassName("textAreaResize");
-  // textarea.addEventListener('input', autoResize, false);
   divdatastr += `<p><button onclick="listazlecenia()">Powrót</button></p>`;
   document.getElementById("data").innerHTML = divdatastr;
 }
-
-
 function autoResize(a) {
   a.style.height = 'auto';
   a.style.height = a.scrollHeight + 'px';
+}
+async function rejestracja() {
+  user = new Klient();
+  if (await sendData("checkUsername", [document.getElementById("nazwa").value, user.nazwa])) { alert("Ta nazwa użytkownika jest już zajęta!"); }
+  else {
+    if (document.getElementById("haslo").value != document.getElementById("powtwierdzhaslo").value) alert("Hasła nie są takie same!");
+    else if (document.getElementById("haslo").value.length < 4) alert("Hasło musi mieć przynajmniej 4 znaki!");
+    else if (document.getElementById("nazwa").value.length < 1) alert("Nazwa użykownika musi mieć przynajmniej 1 znak!");
+    else user.setOsoba(document.getElementById("imie").value, document.getElementById("nazwisko").value, document.getElementById("dataUr").value, document.getElementById("nrTel").value, document.getElementById("plec").value, document.getElementById("nazwa").value, document.getElementById("haslo").value);
+  }
 }
