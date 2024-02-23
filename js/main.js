@@ -115,7 +115,6 @@ class Samochod {
   }
   async removeSamochod() {
     await sendData("removeSamochod", [this.id_samochod]);
-    listasamochody();
   }
   async zezlomowanie(val) {
     alert("Zezłomowałeś samochód");
@@ -125,7 +124,28 @@ class Samochod {
   async naczesci(val) {
     alert("Sprzedałeś samochód na części");
     await sendData("setUpdPieniadze", [val])
-    this.removeSamochod();
+    await this.removeSamochod();
+    listasamochody();
+  }
+  async setZlecenie(problem, mechanik_id) {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    let fulldate = yyyy + "-" + mm + "-" + dd
+    await sendData("setZlecenie", [mechanik_id, this.id_samochod, problem, fulldate]);
+    listazlecenia();
+  }
+  async setUpdStatus(status) {
+    await sendData("setUpdStatus", [status, this.id_samochod]);
+    nowezlecenie();
+  }
+  async kradziez() {
+    alert("Ukradłeś samochód");
+    await this.removeSamochod();
+    nowezlecenie();
   }
 }
 class Mechanik extends Osoba {
@@ -196,6 +216,11 @@ class Zlecenie {
     if (mm < 10) mm = '0' + mm;
     let fulldate = yyyy + "-" + mm + "-" + dd
     await sendData("setUpdZlecenie", [fulldate, this.id_zlecenia])
+    listazlecenia();
+  }
+  async removeZlecenie() {
+    await sendData("removeZlecenie", [this.id_zlecenia]);
+    alert("Usunąłeś zlecenie");
     listazlecenia();
   }
 }
@@ -313,8 +338,8 @@ async function listazlecenia() {
       if (zlecenia[i].dataZakonczenia == null) divdatastr += "Nie zakończono";
       else divdatastr += zlecenia[i].dataZakonczenia;
       divdatastr += `<td>`;
-      if (zlecenia[i].dataZakonczenia == null) divdatastr += `<button onclick="zlecenia[${i}].zakoncz()">Zakończ</button>`;
-      divdatastr += `</td></td></tr>`;
+      if (zlecenia[i].dataZakonczenia == null) divdatastr += `<button onclick="zlecenia[${i}].zakoncz()">Zakończ</button> `;
+      divdatastr += `<button onclick="zlecenia[${i}].removeZlecenie()">Usuń</button></td></td></tr>`;
     }
     divdatastr += `</table></p>`;
   } else {
@@ -335,8 +360,8 @@ async function nowezlecenie() {
       await samochody[i].getSamochod(i, 1, "all");
       divdatastr += `<tr><td>${samochody[i].marka}</td><td>${samochody[i].rocznik}r.</td><td>${samochody[i].przebiegWCm}cm</td>
     <td>${samochody[i].model}</td><td>${samochody[i].rejestracja}</td><td><textarea oninput="autoResize(this);" onclick="autoResize(this);" spellcheck="false" id="status${i}">${samochody[i].status}</textarea></td><td>`;
-      divdatastr += `<button onclick="podejmijzlecenie(${i})">Podejmij się zlecenia</button><br/><button onclick="zmienstatus(${i})">Zmień status</button><br/>
-      <button onclick="kradziez(${i})">Ukradnij</button></td></tr>`;
+      divdatastr += `<button onclick="podejmijzlecenie(${i})">Podejmij się zlecenia</button><br/><button onclick="samochody[${i}].setUpdStatus(document.getElementById('status${i}').value)">Zmień status</button><br/>
+      <button onclick="samochody[${i}].kradziez()">Ukradnij</button></td></tr>`;
     }
     divdatastr += `</table></p>`;
   } else {
@@ -348,6 +373,10 @@ async function nowezlecenie() {
 function autoResize(a) {
   a.style.height = 'auto';
   a.style.height = a.scrollHeight + 10 + 'px';
+}
+function podejmijzlecenie(i) {
+  let x = prompt("Praca której się podejmiesz:")
+  if (x!=null) samochody[i].setZlecenie(x, user.id_mechanik);
 }
 async function rejestracja() {
   user = new Klient();

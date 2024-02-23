@@ -165,9 +165,15 @@ function getSamochod($start = 0, $count = 1000000000, $id = null)
         $arr[] = $row;
     echo json_encode($arr);
 }
-function setUpdStatus($status) {
-    
+function setUpdStatus($status, $id_samochod) {
+    global $conn;
+    $query = $conn->prepare("update samochod set status=? where id_samochod=?");
+    $query->bind_param("si", $status, $id_samochod);
+    $query->execute();
+    $query->close();
+    echo json_encode(true);
 }
+
 function addSamochod($marka, $rocznik, $przebiegwcm, $model, $rejestracja, $status)
 {
     global $conn;
@@ -200,11 +206,11 @@ function getMechanik()
         $arr[] = $row;
     echo json_encode($arr);
 }
-function setZlecenie($mechanik_id, $samochod_id, $problem, $dataRozpoczecia, $dataZakonczenia)
+function setZlecenie($mechanik_id, $samochod_id, $problem, $dataRozpoczecia)
 {
     global $conn;
-    $query = $conn->prepare("insert into zlecenie (mechanik_id, samochod_id, problem, datarozpoczecia, datazakonczenia) values (?, ?, ?, ?, ?)");
-    $query->bind_param("iisss", $mechanik_id, $samochod_id, $problem, $dataRozpoczecia, $dataZakonczenia);
+    $query = $conn->prepare("insert into zlecenie (mechanik_id, samochod_id, problem, datarozpoczecia) values (?, ?, ?, ?)");
+    $query->bind_param("iiss", $mechanik_id, $samochod_id, $problem, $dataRozpoczecia);
     $query->execute();
     $query->close();
     echo json_encode(true);
@@ -238,10 +244,10 @@ function setUpdZlecenie($dataZakonczenia, $id)
     $query->close();
     echo json_encode(true);
 }
-function removeZlecenie($id, $samochod_id=0) {
+function removeZlecenie($id) {
     global $conn;
-    $query = $conn->prepare("delete from zlecenie where id_zlecenia=? or samochod_id=?");
-    $query->bind_param("ii", $id, $samochod_id);
+    $query = $conn->prepare("delete from zlecenie where id_zlecenia=?");
+    $query->bind_param("i", $id);
     $query->execute();
     $query->close();
     echo json_encode(true);
