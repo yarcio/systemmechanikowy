@@ -119,11 +119,17 @@ class Samochod {
   async zezlomowanie(val) {
     alert("Zezłomowałeś samochód");
     await sendData("setUpdPieniadze", [val])
-    this.removeSamochod();
+    await this.removeSamochod();
+    listasamochody();
   }
   async naczesci(val) {
     alert("Sprzedałeś samochód na części");
     await sendData("setUpdPieniadze", [val])
+    await this.removeSamochod();
+    listasamochody();
+  }
+  async odbierz() {
+    alert("Odebrałeś samochód");
     await this.removeSamochod();
     listasamochody();
   }
@@ -275,9 +281,8 @@ async function listasamochody() {
       await samochody[i].getSamochod(i);
       divdatastr += `<tr><td>${samochody[i].marka}</td><td>${samochody[i].rocznik}r.</td><td>${samochody[i].przebiegWCm}cm</td>
     <td>${samochody[i].model}</td><td>${samochody[i].rejestracja}</td><td>${samochody[i].status}</td><td>`;
-      if (samochody[i].status != "Do odbioru") divdatastr += `<button onclick="zlecenie(${i})">Podgląd dokonywanych prac</button>`;
-      else divdatastr += `<button onclick="odbierz(${i})">Odbierz</button>`;
-      divdatastr += `<br/><button onclick="zlomowanie(${i})">Zezłomuj</button><br/><button onclick="czesci(${i})">Sprzedaj na części</button></td></tr>`;
+      if (samochody[i].status == "Do odbioru") divdatastr += `<button onclick="samochody[${i}].odbierz()">Odbierz</button><br/>`;
+      divdatastr += `<button onclick="zlecenie(${i})">Podgląd dokonywanych prac</button><br/><button onclick="zlomowanie(${i})">Zezłomuj</button><br/><button onclick="czesci(${i})">Sprzedaj na części</button></td></tr>`;
     }
     divdatastr += `</table></p>`;
   } else {
