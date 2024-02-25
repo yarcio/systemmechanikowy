@@ -1,8 +1,23 @@
 <?php
-include $_SERVER["DOCUMENT_ROOT"]."/php/main.php";
+include $_SERVER["DOCUMENT_ROOT"] . "/php/main.php";
 checklogin("m");
 ?>
-<h1>MECHANIK</h1>
-<script src="/js/main.js"></script>
-<div id="data"></div>
-<script>initMechanik();</script>
+
+<!DOCTYPE html>
+<html lang="pl-PL">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanik z pasji</title>
+    <link rel="stylesheet" href="../stylesheet/stylemechanik.css?<?php echo time(); ?>">
+</head>
+
+<body>
+    <h1>MECHANIK</h1>
+    <script src="/js/main.js"></script>
+    <div id="data"></div>
+    <script>initMechanik();</script>
+</body>
+
+</html>

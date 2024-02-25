@@ -330,7 +330,7 @@ function dodajsamochod() {
   <p>Rejestracja:<br/><input type="text" id="rejestracja"/></p>
   <p>Powód odwiedzin w serwisie:<br/><input type="text" id="status"/></p>
   <button onclick="listasamochody()">Anuluj</button> 
-  <button onclick='nowysamochod.addSamochod(document.getElementById("marka").value, document.getElementById("rocznik").value, document.getElementById("przebieg").value, document.getElementById("model").value, document.getElementById("rejestracja").value, "Oczekuje na przyjęcie zlecenia, powód wizyty: " + document.getElementById("status").value)'>Zatwierdź</button>`;
+  <button class="zatwierdz" onclick='nowysamochod.addSamochod(document.getElementById("marka").value, document.getElementById("rocznik").value, document.getElementById("przebieg").value, document.getElementById("model").value, document.getElementById("rejestracja").value, "Oczekuje na przyjęcie zlecenia, powód wizyty: " + document.getElementById("status").value)'>Zatwierdź</button>`;
 }
 function czesci(i) {
   let rand = parseInt((((getRandomInt(10) ** (getRandomInt(6) + 1)) / (getRandomInt(3) + 1)) + samochody[i].rocznik * (getRandomInt(2) + 1)) * 100);
