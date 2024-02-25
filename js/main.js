@@ -310,7 +310,7 @@ async function zlecenieSamochod(i) {
       divdatastr += `<tr><td>${zlecenieS[i].problem}</td><td>${zlecenieS[i].dataRozpoczecia}</td><td>`;
       if (zlecenieS[i].dataZakonczenia == null) divdatastr += "Nie zakończono";
       else divdatastr += zlecenieS[i].dataZakonczenia;
-      divdatastr += `<td><button onclick="zlecenieS[${i}].removeZlecenie()">Anuluj zlecenie</button></td></td></tr>`;
+      divdatastr += `<td><button onclick="zlecenieS[${i}].removeZlecenie()">Anuluj/usuń zlecenie</button></td></td></tr>`;
     }
     divdatastr += `</table></p>`;
   } else {
