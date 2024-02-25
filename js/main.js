@@ -298,8 +298,8 @@ async function listasamochody() {
   document.getElementById("data").innerHTML = divdatastr;
 }
 var zlecenieS;
-async function zlecenieSamochod(i) {
-  let zlecenieCountS = await samochody[i].getCountZlecenie();
+async function zlecenieSamochod(j) {
+  let zlecenieCountS = await samochody[j].getCountZlecenie();
   let divdatastr = "";
   if (zlecenieCountS > 0) {
     divdatastr += `<p><table><caption>Lista twoich zleceń</caption><tr><th>Problem</th><th>Rozpoczęto</th><th>Zakończono</th><th>Działania</th></tr>`;
@@ -310,7 +310,7 @@ async function zlecenieSamochod(i) {
       divdatastr += `<tr><td>${zlecenieS[i].problem}</td><td>${zlecenieS[i].dataRozpoczecia}</td><td>`;
       if (zlecenieS[i].dataZakonczenia == null) divdatastr += "Nie zakończono";
       else divdatastr += zlecenieS[i].dataZakonczenia;
-      divdatastr += `<td><button onclick="zlecenieS[${i}].removeZlecenie()">Anuluj/usuń zlecenie</button></td></td></tr>`;
+      divdatastr += `<td><button onclick="zlecenieS[${i}].removeZlecenie(); zlecenieSamochod(${j})">Anuluj/usuń zlecenie</button></td></td></tr>`;
     }
     divdatastr += `</table></p>`;
   } else {
