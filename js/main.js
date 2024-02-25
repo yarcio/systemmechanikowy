@@ -306,7 +306,7 @@ async function zlecenieSamochod(j) {
     zlecenieS = [];
     for (let i = 0; i < zlecenieCountS; i++) {
       zlecenieS[i] = new Zlecenie();
-      await zlecenieS[i].getZlecenie(i, 1, null, samochody[i].id_samochod);
+      await zlecenieS[i].getZlecenie(i, 1, null, samochody[j].id_samochod);
       divdatastr += `<tr><td>${zlecenieS[i].problem}</td><td>${zlecenieS[i].dataRozpoczecia}</td><td>`;
       if (zlecenieS[i].dataZakonczenia == null) divdatastr += "Nie zakończono";
       else divdatastr += zlecenieS[i].dataZakonczenia;
