@@ -71,6 +71,16 @@ input[type="submit"]:hover, button:hover {
     background-color: #c3073f;
 }
 
+#podpis {
+    margin: 0;
+    padding: 0;
+    position:absolute;
+    bottom: 0;
+    text-align: center;
+    font-size: 10px;
+    width: 98%;
+}
+
 @media only screen and (max-width:800px) {
     .margines {
         margin-left: calc(20%);
