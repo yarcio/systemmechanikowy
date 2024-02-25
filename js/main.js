@@ -287,7 +287,7 @@ async function listasamochody() {
       divdatastr += `<tr><td>${samochody[i].marka}</td><td>${samochody[i].rocznik}r.</td><td>${samochody[i].przebiegWCm}cm</td>
     <td>${samochody[i].model}</td><td>${samochody[i].rejestracja}</td><td>${samochody[i].status}</td><td>`;
       if (samochody[i].status == "Do odbioru") divdatastr += `<button onclick="samochody[${i}].odbierz()">Odbierz</button><br/>`;
-      divdatastr += `<button onclick="zlecenieSamochod(${i})">Podgląd dokonywanych prac</button><br/><button onclick="zlomowanie(${i})">Zezłomuj</button><br/><button onclick="czesci(${i})">Sprzedaj na części</button></td></tr>`;
+      divdatastr += `<button onclick="zlecenieSamochod(${i})">Podgląd</button><br/><button onclick="zlomowanie(${i})">Zezłomuj</button><br/><button onclick="czesci(${i})">Sprzedaj na części</button></td></tr>`;
     }
     divdatastr += `</table></p>`;
   } else {
