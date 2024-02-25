@@ -1,3 +1,0 @@
-logowanie //php przekieruje do odpowiedniego folderu
-rejestracja - przekierowanie do rejestraci
-twórcy - przekierowanie do twórców(bez zygmunta)

@@ -1,1 +1,0 @@
-inputy z wszystkimi danymi (imie, nazwisko, dataurodzenia, nrtel, plec, nazwauzytkownika, haslo) które będą potrzebne do osoba, po zatwierdzeniu przekierowanie do logowania

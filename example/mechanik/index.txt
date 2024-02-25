@@ -1,1 +1,0 @@
-tabla z zleceniami w div#data, resztę wymyśl sam ewentualnie, takie rzeczy jak szczegóły konta itd
