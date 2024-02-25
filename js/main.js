@@ -144,6 +144,10 @@ class Samochod {
     await sendData("setZlecenie", [mechanik_id, this.id_samochod, problem, fulldate]);
     listazlecenia();
   }
+  async getCountZlecenie() {
+    let response = await sendData("getCountZlecenie", [null, this.id_samochod])
+    return response;
+  }
   async setUpdStatus(status) {
     await sendData("setUpdStatus", [status, this.id_samochod]);
     nowezlecenie();
@@ -205,6 +209,7 @@ class Zlecenie {
   }
 
   async getZlecenie(start = 0, count = 1, mechanik_id = null, samochod_id = null, pos = 0) {
+    console.log("a");
     let response = await sendData("getZlecenie", [start, count, mechanik_id, samochod_id]);
     this.id_zlecenia = response[pos]["id_zlecenia"];
     this.id_mechanik = response[pos]["id_mechanik"];
@@ -282,7 +287,7 @@ async function listasamochody() {
       divdatastr += `<tr><td>${samochody[i].marka}</td><td>${samochody[i].rocznik}r.</td><td>${samochody[i].przebiegWCm}cm</td>
     <td>${samochody[i].model}</td><td>${samochody[i].rejestracja}</td><td>${samochody[i].status}</td><td>`;
       if (samochody[i].status == "Do odbioru") divdatastr += `<button onclick="samochody[${i}].odbierz()">Odbierz</button><br/>`;
-      divdatastr += `<button onclick="zlecenie(${i})">Podgląd dokonywanych prac</button><br/><button onclick="zlomowanie(${i})">Zezłomuj</button><br/><button onclick="czesci(${i})">Sprzedaj na części</button></td></tr>`;
+      divdatastr += `<button onclick="zlecenieSamochod(${i})">Podgląd dokonywanych prac</button><br/><button onclick="zlomowanie(${i})">Zezłomuj</button><br/><button onclick="czesci(${i})">Sprzedaj na części</button></td></tr>`;
     }
     divdatastr += `</table></p>`;
   } else {
@@ -290,6 +295,28 @@ async function listasamochody() {
   }
   divdatastr += `<p>Oddaj samochód do serwisu <button onclick="dodajsamochod()">Wypełnij dane</button></p>
   <p><button onclick='konto()'>Twoje konto</button></p>`;
+  document.getElementById("data").innerHTML = divdatastr;
+}
+var zlecenieS;
+async function zlecenieSamochod(i) {
+  let zlecenieCountS = await samochody[i].getCountZlecenie();
+  let divdatastr = "";
+  if (zlecenieCountS > 0) {
+    divdatastr += `<p><table><caption>Lista twoich zleceń</caption><tr><th>Problem</th><th>Rozpoczęto</th><th>Zakończono</th><th>Działania</th></tr>`;
+    zlecenieS = [];
+    for (let i = 0; i < zlecenieCountS; i++) {
+      zlecenieS[i] = new Zlecenie();
+      await zlecenieS[i].getZlecenie(i, 1, null, samochody[i].id_samochod);
+      divdatastr += `<tr><td>${zlecenieS[i].problem}</td><td>${zlecenieS[i].dataRozpoczecia}</td><td>`;
+      if (zlecenieS[i].dataZakonczenia == null) divdatastr += "Nie zakończono";
+      else divdatastr += zlecenieS[i].dataZakonczenia;
+      divdatastr += `<td><button onclick="zlecenieS[${i}].removeZlecenie()">Anuluj zlecenie</button></td></td></tr>`;
+    }
+    divdatastr += `</table></p>`;
+  } else {
+    divdatastr += `<p>Ten samochód nie ma przypisanych zleceń</p>`;
+  }
+  divdatastr += `<button onclick="listasamochody()">Powrót</button>`
   document.getElementById("data").innerHTML = divdatastr;
 }
 var nowysamochod;
