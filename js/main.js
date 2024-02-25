@@ -7,11 +7,7 @@ async function sendData(func, vars) {
       method: "POST",
       body: formData,
     });
-    // return await response.json();
-    let x = await response.text();
-    console.log(x);
-    return JSON.parse(x);
-    //^ Debug only
+    return await response.json();
   } catch (e) {
     console.error(e);
   }
@@ -209,7 +205,6 @@ class Zlecenie {
   }
 
   async getZlecenie(start = 0, count = 1, mechanik_id = null, samochod_id = null, pos = 0) {
-    console.log("a");
     let response = await sendData("getZlecenie", [start, count, mechanik_id, samochod_id]);
     this.id_zlecenia = response[pos]["id_zlecenia"];
     this.id_mechanik = response[pos]["id_mechanik"];
