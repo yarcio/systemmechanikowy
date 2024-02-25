@@ -59,7 +59,7 @@ input[type="text"] {
     border-radius: 2px 2px;
     border: 0px;
     height: 30px;
-    width: 50%;
+    width: 98%;
     margin-bottom: 5px;
     color: red;
 }
@@ -68,8 +68,8 @@ input[type="date"] {
     background-color: #484980;
     border-radius: 2px 2px;
     border: 0px;
-    height: 30px;
-    width: 50%;
+    height: 32px;
+    width: 98%;
     margin-bottom: 5px;
     color: red;
 }
@@ -79,7 +79,7 @@ input[type="range"] {
     border-radius: 2px 2px;
     border: 0px;
     height: 30px;
-    width: 30%;
+    width: 78%;
     margin-bottom: 5px;
 }
 
@@ -88,7 +88,7 @@ input[type="password"] {
     border-radius: 2px 2px;
     border: 0px;
     height: 30px;
-    width: 50%;
+    width: 98%;
     margin-bottom: 5px;
     color: red;
 }
@@ -98,7 +98,7 @@ input[type="number"] {
     border-radius: 2px 2px;
     border: 0px;
     height: 30px;
-    width: 50%;
+    width: 98%;
     margin-bottom: 5px;
     color: red;
 }
@@ -115,6 +115,11 @@ input[type="submit"] {
     margin-bottom: 2px;
 }
 
+.polowa {
+    width: 50%;
+    float: left;
+    text-align: center;
+}
 
 @media only screen and (max-width:800px) {
     button, input[type="submit"] {
@@ -134,5 +139,10 @@ input[type="submit"] {
 
     h1 {
         font-size: 8vw;
+    }
+
+    .polowa {
+        width: 100%;
+        float: none;
     }
 }

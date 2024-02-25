@@ -232,15 +232,20 @@ class Zlecenie {
 }
 
 async function konto() {
-  document.getElementById("data").innerHTML = `<p>Imie:<br/><input type='text' id='imie' value='${user.imie}'/></p>
+  document.getElementById("data").innerHTML = `
+  <div class="polowa">
+  <p>Imie:<br/><input type='text' id='imie' value='${user.imie}'/></p>
   <p>Nazwisko:<br/><input type='text' id='nazwisko' value='${user.nazwisko}'/></p>
   <p>Data urodzenia:<br/><input type='date' id='dataUr' value='${user.dataUr}'/></p>
   <p>Numer telefonu:<br/><input type='text' id='nrTel' value='${user.nrTel}'/></p>
+  </div>
+  <div class="polowa">
   <p>Płeć: <output id="jakaplec">${user.plec}</output><br>
   K<input id="plec" type="range" min="-1" max="1" step="0.01" value=${user.plec} oninput="sliderRefresh()">M</p>
   <p>Nazwa użytkownika:<br/><input type='text' id='nazwa' value='${user.nazwa}'/></p>
   <p>Hasło:<br/><input type="password" id="haslo"/></p>
   <p>Potwierdź hasło:<br/><input type="password" id="powtwierdzhaslo"/></p>
+  </div>
   <p><button onclick="backKonto()">Powrót</button> <input type="submit" value="Zaktualizuj" onclick="zaktualizujKonto()"/></p>`;
 }
 function backKonto() {
