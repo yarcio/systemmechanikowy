@@ -24,6 +24,10 @@ button {
     margin-bottom: 4px;
 }
 
+input[type="submit"]:hover, button:hover {
+    background-color: red;
+}
+
 td, th  {
     border: 1px #0e0d0b solid;
     background-color: #0e0d0b;
