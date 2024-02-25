@@ -2,9 +2,8 @@
 
 body {
     font-family: 'Quicksand',sans-serif;
-    background-color: #202125;
-    /* background-color: red; */
-    color: #494BC3;
+    background-color: #1a1a1d;
+    color: #950740;
 }
 
 h1 {
@@ -15,19 +14,20 @@ h1 {
 
 
 button {
-    background-color: #494BC3;
+    background-color: #c3073f;
     border: 0;
     padding: 5px;
     border-radius: 2px 2px;
     font-size: 1vw;
     width: 20%;
     min-width: 200px;
-    margin-right: 1.5%;
+    margin-left: 1.5%;
     margin-bottom: 2px;
+    height: 30px;
 }
 
 input[type="submit"]:hover, button:hover {
-    background-color: red;
+    background-color: #c3073f; 
 }
 
 td, th  {
@@ -53,61 +53,31 @@ p {
     font-size: 1.3vw;
 }
 
-
-input[type="text"] {
-    background-color: #484980;
+input {
     border-radius: 2px 2px;
-    border: 0px;
     height: 30px;
-    width: 98%;
+    width: 90%;
+    border: 0;
+    color: #000000;
     margin-bottom: 5px;
-    color: red;
-}
-
-input[type="date"] {
-    background-color: #484980;
-    border-radius: 2px 2px;
-    border: 0px;
-    height: 32px;
-    width: 98%;
-    margin-bottom: 5px;
-    color: red;
+    background-color: #753b4c;
 }
 
 input[type="range"] {
-    background-color: #484980;
-    border-radius: 2px 2px;
-    border: 0px;
-    height: 30px;
+    width: 30%;
+}
+
+input[type="date"] {
+    height: 32px;
+}
+
+input[type="range"] {
     width: 78%;
-    margin-bottom: 5px;
-}
-
-input[type="password"] {
-    background-color: #484980;
-    border-radius: 2px 2px;
-    border: 0px;
-    height: 30px;
-    width: 98%;
-    margin-bottom: 5px;
-    color: red;
-}
-
-input[type="number"] {
-    background-color: #484980;
-    border-radius: 2px 2px;
-    border: 0px;
-    height: 30px;
-    width: 98%;
-    margin-bottom: 5px;
-    color: red;
 }
 
 input[type="submit"] {
-    background-color: #494BC3;
-    border: 0;
+    background-color: #c3073f;
     padding: 5px;
-    border-radius: 2px 2px;
     font-size: 1vw;
     width: 20%;
     min-width: 200px;
@@ -115,8 +85,12 @@ input[type="submit"] {
     margin-bottom: 2px;
 }
 
+button[onclick="backKonto()"] {
+    margin-left: 2.2%;
+}
+
 textarea {
-    background-color: #494BC3;
+    background-color: #753b4c;
     border-radius: 2px 2px;
     font-size: 1vw;
     width: 20;
