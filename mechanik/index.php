@@ -10,6 +10,7 @@ checklogin("m");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mechanik z pasji</title>
+    <link rel="shortcut icon" href="../icon.png" type="image/x-icon">
     <link rel="stylesheet" href="../stylesheet/stylemechanik.css?<?php echo time(); ?>">
 </head>
 
