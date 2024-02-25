@@ -323,9 +323,7 @@ var nowysamochod;
 function dodajsamochod() {
   nowysamochod = new Samochod();
   document.getElementById("data").innerHTML = `
-  <p>Marka:<br/><input type="text" id="marka"/></p>
-  <p>Rocznik:<br/><input type="number" id="rocznik"/></p>
-  <p>Przebieg (cm):<br/><input type="number" id="przebieg"/></p>
+  <p>Marka:<br/><input type="text" id="marka"/></p><p>Rocznik:<br/><input type="number" id="rocznik"/></p><p>Przebieg (cm):<br/><input type="number" id="przebieg"/></p>
   <p>Model:<br/><input type="text" id="model"/></p>
   <p>Rejestracja:<br/><input type="text" id="rejestracja"/></p>
   <p>Powód odwiedzin w serwisie:<br/><input type="text" id="status"/></p>

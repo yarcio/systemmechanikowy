@@ -252,6 +252,9 @@ function removeZlecenie($id) {
     $query->close();
     echo json_encode(true);
 }
+
+
+
 function test($a = 1, $b = 2)
 {
     $sum = $a + $b;
