@@ -6,10 +6,16 @@ body {
     color: #950740;
 }
 
+img {
+    width: 3.6%;
+    margin-right: 4%;
+}
+
 h1 {
     font-size: 4vw;
     margin-bottom: 5px;
     margin-top: 10px;
+    margin-left: 2.4%;
 }
 
 
@@ -21,7 +27,6 @@ button {
     font-size: 1vw;
     width: 20%;
     min-width: 200px;
-    margin-left: 1.5%;
     margin-bottom: 2px;
     height: 30px;
 }
@@ -104,6 +109,10 @@ textarea {
 }
 
 @media only screen and (max-width:800px) {
+    img {
+        width: 7%;
+    }
+
     button, input[type="submit"] {
         min-width: 100px;
         font-size: 2vw;

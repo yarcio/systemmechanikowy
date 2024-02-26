@@ -14,7 +14,7 @@
     session_start();
     session_destroy();
     ?>
-    <h1>ZAREJESTRUJ SIĘ</h1>
+    <h1><a href="/"><img src="powrot.png" alt="powrot"></a>ZAREJESTRUJ SIĘ</h1>
     <script src="js/main.js"></script>
     <div class="polowa">
         <p>Imie:<br /><input type='text' id='imie' /></p>

@@ -14,7 +14,7 @@ checklogin("k");
 </head>
 
 <body>
-    <h1>KLIENT</h1>
+    <h1><a href="/"><img src="../powrot.png" alt="powrot"></a>KLIENT</h1>
     <script src="/js/main.js"></script>
     <div id="data"></div>
     <script>initKlient();</script>

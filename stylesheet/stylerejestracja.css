@@ -6,6 +6,11 @@ body {
     color: #950740;
 }
 
+img {
+    width: 3.6%;
+    margin-right: 4%;
+}
+
 p {
     font-weight: bold;
     font-size: 1.2vw;
@@ -51,6 +56,10 @@ input[type="submit"]:hover, button:hover {
 }
 
 @media only screen and (max-width:750px) {
+    img {
+        width: 6.6%;
+    }
+    
     h1 {
         font-weight: bold;
         font-size: 7vw;

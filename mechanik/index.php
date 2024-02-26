@@ -15,7 +15,7 @@ checklogin("m");
 </head>
 
 <body>
-    <h1>MECHANIK</h1>
+    <h1><a href="/"><img src="../powrot.png" alt="powrot"></a>MECHANIK</h1>
     <script src="/js/main.js"></script>
     <div id="data"></div>
     <script>initMechanik();</script>
