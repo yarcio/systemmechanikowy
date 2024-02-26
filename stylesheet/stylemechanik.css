@@ -84,14 +84,22 @@ input[type="submit"] {
     background-color: #c3073f;
     padding: 5px;
     font-size: 1vw;
-    width: 20%;
     min-width: 200px;
     margin-right: 1.5%;
     margin-bottom: 2px;
 }
 
 button[onclick="backKonto()"] {
-    margin-left: 2.2%;
+    margin-left: 3.2%;
+}
+
+.szesc {
+    margin-left: 2.4%;
+    width: 45.25%;
+}
+
+#czysty {
+    clear: both;
 }
 
 textarea {
@@ -124,7 +132,7 @@ textarea {
         font-size: 3vw;
     }
 
-    button[onclick="listasamochody()"], .zatwierdz{
+    button[onclick="listasamochody()"], #zatwierdz{
         font-size: 3vw;
     }
 
@@ -135,5 +143,15 @@ textarea {
     .polowa {
         width: 100%;
         float: none;
+    }
+    
+    .szesc {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    button[onclick="backKonto()"], input[type="submit"] {
+        margin-left: 0;
+        width: 100%;
     }
 }

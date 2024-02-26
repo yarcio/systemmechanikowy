@@ -246,7 +246,7 @@ async function konto() {
   <p>Hasło:<br/><input type="password" id="haslo"/></p>
   <p>Potwierdź hasło:<br/><input type="password" id="powtwierdzhaslo"/></p>
   </div>
-  <p><button onclick="backKonto()">Powrót</button> <input type="submit" value="Zaktualizuj" onclick="zaktualizujKonto()"/></p>`;
+  <div id="czysty"><input class="szesc" type="submit" value="Zatwierdź" onclick="zaktualizujKonto()"/><button class="szesc" onclick="backKonto()">Powrót</button> </div>`;
 }
 function backKonto() {
   if (mode == "k") listasamochody();
@@ -293,8 +293,8 @@ async function listasamochody() {
   } else {
     divdatastr += `<p>Nie masz jeszcze samochodu w naszym serwisie</p>`;
   }
-  divdatastr += `<p>Oddaj samochód do serwisu <button onclick="dodajsamochod()">Wypełnij dane</button></p>
-  <p><button onclick='konto()'>Twoje konto</button></p>`;
+  divdatastr += `<p><button onclick="dodajsamochod()">Oddaj do serwisu</button><br>
+  <button onclick='konto()'>Twoje konto</button></p>`;
   document.getElementById("data").innerHTML = divdatastr;
 }
 var zlecenieS;
@@ -327,8 +327,8 @@ function dodajsamochod() {
   <p>Model:<br/><input type="text" id="model"/></p>
   <p>Rejestracja:<br/><input type="text" id="rejestracja"/></p>
   <p>Powód odwiedzin w serwisie:<br/><input type="text" id="status"/></p>
-  <button onclick="listasamochody()">Anuluj</button> 
-  <button class="zatwierdz" onclick='nowysamochod.addSamochod(document.getElementById("marka").value, document.getElementById("rocznik").value, document.getElementById("przebieg").value, document.getElementById("model").value, document.getElementById("rejestracja").value, "Oczekuje na przyjęcie zlecenia, powód wizyty: " + document.getElementById("status").value)'>Zatwierdź</button>`;
+  <button class="szesc" id="zatwierdz" onclick='nowysamochod.addSamochod(document.getElementById("marka").value, document.getElementById("rocznik").value, document.getElementById("przebieg").value, document.getElementById("model").value, document.getElementById("rejestracja").value, "Oczekuje na przyjęcie zlecenia, powód wizyty: " + document.getElementById("status").value)'>Zatwierdź</button>
+  <button class="szesc" onclick="listasamochody()">Powrót</button>`;
 }
 function czesci(i) {
   let rand = parseInt((((getRandomInt(10) ** (getRandomInt(6) + 1)) / (getRandomInt(3) + 1)) + samochody[i].rocznik * (getRandomInt(2) + 1)) * 100);
@@ -375,8 +375,9 @@ async function listazlecenia() {
   } else {
     divdatastr += `<p>Nie podjąłeś się jeszcze żadnego zlecenia</p>`;
   }
-  divdatastr += `<p>Podejmij się nowego zlecenia <button onclick="nowezlecenie()">Wybierz samochód</button></p>
-  <p><button onclick='konto()'>Twoje konto</button> <button onclick="mechanikinfo()">Informacje o tobie</button></p>`;
+  divdatastr += `<p><button onclick="nowezlecenie()">Nowe zlecenie</button><br>
+  <button onclick='konto()'>Twoje konto</button><br>
+  <button onclick="mechanikinfo()">Informacje o tobie</button></p>`;
   document.getElementById("data").innerHTML = divdatastr;
 }
 async function nowezlecenie() {
